@@ -59,32 +59,40 @@
 					</a>
 				</li>
 				<div id="score">
-				<h3>League info</h3>
-				<br>
+				
 				<?php
-					$uri = $_GET["url"];
-				    //$uri = 'http://api.football-data.org/alpha/soccerseasons';
+				    $uri = $_GET['name'];
 				    $reqPrefs['http']['method'] = 'GET';
 				    $reqPrefs['http']['header'] = 'X-Auth-Token: 4b5c5c09eb264979b67f9ce7afc31e04';
 				    $stream_context = stream_context_create($reqPrefs);
 				    $response = file_get_contents($uri, false, $stream_context);
 				    $teams = json_decode($response);
-				   	$uri = ($teams->_links->leagueTable->href);
-				   	//var_dump ($teams->_links->leagueTable->href);
-				    $response = file_get_contents($uri, false, $stream_context);
-				    $teams = json_decode($response);
-				    //echo $response;
-				    echo "<h3>". $teams->leagueCaption."</h3><br>";				 
-				  	echo "<table>";
-				  	echo "<tr><th>Position</th><th>Team</th><th>Games Played</th><th>points</th><th>Goals</th><th>Goals Against</th><th>Goal difference</th></tr>";
+				    //var_dump($teams[0]->_links->self->href);
+				  	echo "<h3>$teams->name</h3><br>";
+				  	echo "<span>";
+				  	echo "<img height='200px' width ='200px' src='$teams->crestUrl' </img>";
+				
+					$newUri = $teams->_links->players->href;
+					$newResponse = file_get_contents($newUri, false, $stream_context);
+				    $players = json_decode($newResponse);
+					echo "<br><br><b>Team Code:</b> $teams->code</br><br>";
+					echo "<b>Market Value:</b> $teams->squadMarketValue</br>";
+					echo "<div id='players'";
+					echo "<center><h2><b>Players</b></h2><br></center>";
+					echo "<table cellspacing = '20'>";
+				  	echo "<tr><th>Jersey Number</th><th>Name</th><th>Position</th><th>DOB</th><th>Contract until</th><th>value</th><th>Player ID</th></tr>";
 
-				  	for ($i=0; $i <count($teams->standing); $i++) { 
+				  	for ($i=0; $i < $players->count; $i++) { 
 				  		# code...
-				  			echo "<tr><td>".$teams->standing[$i]->position."</td><td><a href=fullteam.php?name=".$teams->standing[$i]->_links->team->href.">".$teams->standing[$i]->teamName."</a></td><td>".$teams->standing[$i]->playedGames."</td><td>".$teams->standing[$i]->points."</td><th>".$teams->standing[$i]->goals."</td><td>".$teams->standing[$i]->goalsAgainst."</td><td>".$teams->standing[$i]->goalDifference."</td></tr>";
+				  			echo "<tr><td>".$players->players[$i]->jerseyNumber."</td><td><a href=player.php?name=".$players->players[$i]->id.">".$players->players[$i]->name."</a></td><td>".$players->players[$i]->position."</td><td>".$players->players[$i]->dateOfBirth."</td><th>".$players->players[$i]->contractUntil."</td><td>".$players->players[$i]->marketValue."</td><td>".$players->players[$i]->id."</td></tr>";
 				  	
 				  	}
 				  	echo "</table>" ;
+
 				  
+				?>
+				<br><br>
+				 </div>;					
 				?>
 				<br><br>
 				</div>

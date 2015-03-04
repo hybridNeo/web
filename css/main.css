@@ -4,6 +4,13 @@
         		left:10%;
         		top: 30%;
         	}
+        	#players{
+        		width: 100%;
+        		position: absolute;
+
+        		left:120%;
+        		top: 3%;
+        	}
 			body{
 				background:#081f2c url(bg.jpg) repeat top left;
 				font-family:Arial;
@@ -17,12 +24,13 @@
 
 			}
 			table{
-				padding: 10px;
+				
+				padding: 20px;
 				width: 100%:;
 				border: 1px solid white;
 			}
 			a{
-				color: red;
+				color: orange;
 			}
 			span.reference a{
 				color:#aaa;
